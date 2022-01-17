@@ -1,24 +1,27 @@
-version: "3.2"
+version: "3.6"
 services:
   php:
     build: './php/'
+    networks:
+      - backend
     volumes:
-      - ./app/:/var/www/html/
+      - ./app:/var/www/html/
   apache:
     build: './apache2/'
     depends_on:
       - php
       - mysql
+    networks:
+      - backend
     ports:
-      [ "8080:80" ]
+      - "8081:80"
     volumes:
-      - ./app/:/var/www/html/
+      - ./app:/var/www/html/
   mysql:
     image: mysql
-    ports:
-      - "3306:3306"
+    networks:
+      - backend
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: project
-      MYSQL_USER: project
-      MYSQL_PASSWORD: project
+      - MYSQL_ROOT_PASSWORD=rootpassword
+networks:
+  backend:
