@@ -1,0 +1,21 @@
+version: "3.2"
+services:
+  php:
+    build: './php/'
+    volumes:
+      - ./app/:/var/www/html/
+  apache:
+    build: './apache2/'
+    depends_on:
+      - php
+      - mysql
+    ports:
+      [ "8080:80" ]
+    volumes:
+      - ./app/:/var/www/html/
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: test
